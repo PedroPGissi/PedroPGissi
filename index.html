@@ -1,10 +1,613 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Meu Primeiro Site</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema Escolar</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --card: #1f2937;
+      --card-2: #0b1220;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --primary: #60a5fa;
+      --primary-2: #2563eb;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border: rgba(255,255,255,0.12);
+      --shadow: 0 16px 40px rgba(0,0,0,0.35);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(96,165,250,0.12);
+      border: 1px solid rgba(96,165,250,0.25);
+      color: #bfdbfe;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: rgba(17,24,39,0.9);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .hidden { display: none !important; }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 820px) {
+      .row { grid-template-columns: 1fr; }
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #cbd5e1;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--card-2);
+      color: var(--text);
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: rgba(96,165,250,0.7);
+      box-shadow: 0 0 0 3px rgba(96,165,250,0.18);
+    }
+
+    .btnbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button {
+      border: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: white;
+      transition: transform 0.08s ease, opacity 0.2s ease;
+    }
+
+    button:hover { opacity: 0.95; }
+    button:active { transform: translateY(1px); }
+
+    .btn-primary { background: linear-gradient(180deg, var(--primary), var(--primary-2)); }
+    .btn-success { background: linear-gradient(180deg, #34d399, #16a34a); }
+    .btn-warning { background: linear-gradient(180deg, #fbbf24, #d97706); }
+    .btn-danger { background: linear-gradient(180deg, #f87171, #dc2626); }
+    .btn-gray { background: #374151; }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      background: #1f2937;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+    }
+
+    .tab.active {
+      background: linear-gradient(180deg, var(--primary), var(--primary-2));
+      border-color: transparent;
+    }
+
+    .notice {
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin: 10px 0 0;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .notice.info { background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.28); color: #dbeafe; }
+    .notice.success { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.28); color: #dcfce7; }
+    .notice.warning { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.28); color: #fef3c7; }
+    .notice.danger { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.28); color: #fee2e2; }
+
+    .list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .list-item {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+
+    .muted-box {
+      border: 1px dashed rgba(255,255,255,0.14);
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,0.03);
+    }
+  </style>
 </head>
 <body>
-    <h1>Bem-vindo ao meu site!</h1>
-    <p>Eu fiz isso de graça 😎</p>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <h1>Sistema Escolar</h1>
+        <p>Login, Banheiro e Presença em um painel só.</p>
+      </div>
+      <div class="pill" id="userPill">Não logado</div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginView" class="grid">
+      <div class="card">
+        <h2 class="section-title">Entrar</h2>
+        <div class="row">
+          <div>
+            <label for="loginUser">Usuário</label>
+            <input id="loginUser" type="text" placeholder="Digite seu usuário" />
+          </div>
+          <div>
+            <label for="loginPass">Senha</label>
+            <input id="loginPass" type="password" placeholder="Digite sua senha" />
+          </div>
+        </div>
+        <div class="btnbar">
+          <button class="btn-primary" onclick="login()">Entrar</button>
+          <button class="btn-gray" onclick="showCreateAccount()">Criar conta</button>
+        </div>
+        <div id="loginMessage"></div>
+      </div>
+
+      <div id="createCard" class="card hidden">
+        <h2 class="section-title">Criar conta</h2>
+        <div class="row">
+          <div>
+            <label for="newUser">Usuário</label>
+            <input id="newUser" type="text" placeholder="Crie um usuário" />
+          </div>
+          <div>
+            <label for="newPass">Senha</label>
+            <input id="newPass" type="password" placeholder="Crie uma senha" />
+          </div>
+        </div>
+        <div class="btnbar">
+          <button class="btn-success" onclick="createAccount()">Salvar conta</button>
+          <button class="btn-gray" onclick="hideCreateAccount()">Voltar</button>
+        </div>
+        <div id="createMessage"></div>
+      </div>
+    </div>
+
+    <!-- APP -->
+    <div id="appView" class="grid hidden">
+      <div class="card">
+        <div class="tabs">
+          <button id="tabBanheiro" class="tab active" onclick="openTab('banheiro')">Banheiro</button>
+          <button id="tabPresenca" class="tab" onclick="openTab('presenca')">Presença</button>
+          <button class="tab" onclick="logout()">Sair</button>
+        </div>
+
+        <!-- BANHEIRO -->
+        <div id="banheiroTab">
+          <h2 class="section-title">Controle do Banheiro</h2>
+          <div class="row">
+            <div>
+              <label for="studentName">Nome do aluno</label>
+              <input id="studentName" type="text" placeholder="Digite o nome do aluno" />
+            </div>
+            <div>
+              <label for="className">Turma / Sala (opcional)</label>
+              <input id="className" type="text" placeholder="Ex: 9A" />
+            </div>
+          </div>
+
+          <div class="btnbar">
+            <button class="btn-warning" onclick="sendToBathroom()">Ir ao banheiro</button>
+            <button class="btn-success" onclick="studentReturned()">Aluno voltou</button>
+            <button class="btn-primary" onclick="newClass()">Nova Aula</button>
+          </div>
+
+          <div id="bathroomMessage"></div>
+
+          <div style="margin-top:18px;" class="muted-box">
+            <strong>Lista de alunos no banheiro</strong>
+            <div class="small">Quando um aluno é enviado, o sistema conta 5 minutos. Depois disso aparece um aviso simples.</div>
+            <div id="bathroomList" class="list"></div>
+          </div>
+        </div>
+
+        <!-- PRESENCA -->
+        <div id="presencaTab" class="hidden">
+          <h2 class="section-title">Presença</h2>
+          <div class="notice warning">Aviso: Botão em WIP (Work In Progress)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const accountsKey = 'escola_accounts_v1';
+    const sessionKey = 'escola_session_v1';
+    const bathroomKey = 'escola_bathroom_v1';
+
+    const morningSchedule = [
+      ['Primeira aula', '07:00', '07:50'],
+      ['Segunda aula', '07:50', '08:40'],
+      ['Terceira aula', '08:40', '09:30'],
+      ['Intervalo', '09:30', '09:50'],
+      ['Quarta aula', '09:50', '10:40'],
+      ['Quinta aula', '10:40', '11:30'],
+      ['Sexta aula', '11:30', '12:20']
+    ];
+
+    let bathroomData = loadBathroomData();
+    let timers = {};
+
+    function $(id) { return document.getElementById(id); }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function loadAccounts() {
+      return JSON.parse(localStorage.getItem(accountsKey) || '[]');
+    }
+
+    function saveAccounts(accounts) {
+      localStorage.setItem(accountsKey, JSON.stringify(accounts));
+    }
+
+    function loadSession() {
+      return JSON.parse(localStorage.getItem(sessionKey) || 'null');
+    }
+
+    function saveSession(session) {
+      localStorage.setItem(sessionKey, JSON.stringify(session));
+    }
+
+    function clearSession() {
+      localStorage.removeItem(sessionKey);
+    }
+
+    function loadBathroomData() {
+      return JSON.parse(localStorage.getItem(bathroomKey) || '[]');
+    }
+
+    function saveBathroomData() {
+      localStorage.setItem(bathroomKey, JSON.stringify(bathroomData));
+    }
+
+    function showMessage(elId, text, type = 'info') {
+      $(elId).innerHTML = `<div class="notice ${type}">${text}</div>`;
+    }
+
+    function clearMessage(elId) {
+      $(elId).innerHTML = '';
+    }
+
+    function showCreateAccount() {
+      $('createCard').classList.remove('hidden');
+    }
+
+    function hideCreateAccount() {
+      $('createCard').classList.add('hidden');
+      clearMessage('createMessage');
+    }
+
+    function createAccount() {
+      const user = $('newUser').value.trim();
+      const pass = $('newPass').value.trim();
+
+      if (!user || !pass) {
+        showMessage('createMessage', 'Preencha usuário e senha.', 'warning');
+        return;
+      }
+
+      const accounts = loadAccounts();
+      if (accounts.some(a => a.user.toLowerCase() === user.toLowerCase())) {
+        showMessage('createMessage', 'Esse usuário já existe.', 'danger');
+        return;
+      }
+
+      accounts.push({ user, pass });
+      saveAccounts(accounts);
+      showMessage('createMessage', 'Conta criada com sucesso.', 'success');
+      $('newUser').value = '';
+      $('newPass').value = '';
+    }
+
+    function login() {
+      const user = $('loginUser').value.trim();
+      const pass = $('loginPass').value.trim();
+      const accounts = loadAccounts();
+
+      const found = accounts.find(a => a.user === user && a.pass === pass);
+      if (!found) {
+        showMessage('loginMessage', 'Usuário ou senha incorretos.', 'danger');
+        return;
+      }
+
+      saveSession({ user });
+      $('userPill').textContent = `Logado como ${user}`;
+      $('loginView').classList.add('hidden');
+      $('appView').classList.remove('hidden');
+      clearMessage('loginMessage');
+      renderBathroomList();
+    }
+
+    function logout() {
+      clearSession();
+      $('userPill').textContent = 'Não logado';
+      $('appView').classList.add('hidden');
+      $('loginView').classList.remove('hidden');
+    }
+
+    function openTab(tab) {
+      $('tabBanheiro').classList.remove('active');
+      $('tabPresenca').classList.remove('active');
+      $('banheiroTab').classList.add('hidden');
+      $('presencaTab').classList.add('hidden');
+
+      if (tab === 'banheiro') {
+        $('tabBanheiro').classList.add('active');
+        $('banheiroTab').classList.remove('hidden');
+      } else {
+        $('tabPresenca').classList.add('active');
+        $('presencaTab').classList.remove('hidden');
+      }
+    }
+
+    function getCurrentClassPeriod() {
+      const now = new Date();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+      const parse = (time) => {
+        const [h, m] = time.split(':').map(Number);
+        return h * 60 + m;
+      };
+
+      for (const [name, start, end] of morningSchedule) {
+        if (currentMinutes >= parse(start) && currentMinutes < parse(end)) {
+          return name;
+        }
+      }
+
+      if (currentMinutes >= parse('12:20')) {
+        return 'ENCERRADO';
+      }
+
+      return 'Fora do horário da manhã';
+    }
+
+    function newClass() {
+      const period = getCurrentClassPeriod();
+      if (period === 'ENCERRADO') {
+        showMessage('bathroomMessage', 'Aviso: Horário de aula da manhã já encerrado (Ação concluída da mesma forma)', 'warning');
+      } else {
+        showMessage('bathroomMessage', `Nova Aula definida: ${period}`, 'success');
+      }
+    }
+
+    function sendToBathroom() {
+      const name = $('studentName').value.trim();
+      const className = $('className').value.trim();
+
+      if (!name) {
+        showMessage('bathroomMessage', 'Digite o nome do aluno.', 'warning');
+        return;
+      }
+
+      const period = getCurrentClassPeriod();
+      let warningText = '';
+      if (period === 'ENCERRADO') {
+        warningText = ' Aviso: Horário de aula da manhã já encerrado (Ação concluída da mesma forma)';
+      }
+
+      const id = Date.now();
+      const item = {
+        id,
+        name,
+        className,
+        status: 'no_banheiro',
+        sentAt: new Date().toISOString(),
+        returnedAt: null,
+        warned: false,
+        timeout: null
+      };
+
+      bathroomData.unshift(item);
+      saveBathroomData();
+      renderBathroomList();
+      showMessage('bathroomMessage', `Aluno ${escapeHtml(name)} foi enviado ao banheiro.${warningText}`, 'success');
+      $('studentName').value = '';
+
+      timers[id] = setTimeout(() => {
+        const current = bathroomData.find(s => s.id === id);
+        if (current && current.status === 'no_banheiro') {
+          current.warned = true;
+          saveBathroomData();
+          renderBathroomList();
+          showMessage('bathroomMessage', `Aviso: ${escapeHtml(current.name)} não voltou após 5 minutos.`, 'warning');
+        }
+      }, 5 * 60 * 1000);
+    }
+
+    function studentReturned() {
+      const nome = prompt('Digite o nome do aluno que voltou:');
+      if (!nome) return;
+
+      const search = nome.trim().toLowerCase();
+      const student = bathroomData.find(s => s.name.trim().toLowerCase() === search && s.status === 'no_banheiro');
+
+      if (!student) {
+        showMessage('bathroomMessage', 'Aluno não encontrado na lista de banheiro.', 'danger');
+        return;
+      }
+
+      student.status = 'voltou';
+      student.returnedAt = new Date().toISOString();
+      if (timers[student.id]) {
+        clearTimeout(timers[student.id]);
+        delete timers[student.id];
+      }
+      saveBathroomData();
+      renderBathroomList();
+      showMessage('bathroomMessage', `Aluno ${escapeHtml(student.name)} marcou retorno do banheiro.`, 'success');
+    }
+
+    function renderBathroomList() {
+      const list = $('bathroomList');
+      const active = bathroomData.filter(s => s.status === 'no_banheiro');
+
+      if (active.length === 0) {
+        list.innerHTML = '<div class="small">Nenhum aluno no banheiro agora.</div>';
+        return;
+      }
+
+      list.innerHTML = active.map(student => {
+        const classroom = student.className ? ` • Turma: ${escapeHtml(student.className)}` : '';
+        const warned = student.warned ? ' • Aviso de atraso já enviado' : '';
+        return `
+          <div class="list-item">
+            <div>
+              <strong>${escapeHtml(student.name)}</strong>
+              <div class="small">Saiu: ${new Date(student.sentAt).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}${classroom}${warned}</div>
+            </div>
+            <div class="pill">No banheiro</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function restoreTimers() {
+      bathroomData.forEach(student => {
+        if (student.status === 'no_banheiro' && student.sentAt) {
+          const sent = new Date(student.sentAt).getTime();
+          const elapsed = Date.now() - sent;
+          const remaining = (5 * 60 * 1000) - elapsed;
+
+          if (remaining <= 0 && !student.warned) {
+            student.warned = true;
+          } else if (!student.warned) {
+            timers[student.id] = setTimeout(() => {
+              const current = bathroomData.find(s => s.id === student.id);
+              if (current && current.status === 'no_banheiro') {
+                current.warned = true;
+                saveBathroomData();
+                renderBathroomList();
+                showMessage('bathroomMessage', `Aviso: ${escapeHtml(current.name)} não voltou após 5 minutos.`, 'warning');
+              }
+            }, remaining);
+          }
+        }
+      });
+      saveBathroomData();
+    }
+
+    function boot() {
+      const session = loadSession();
+      if (session?.user) {
+        $('userPill').textContent = `Logado como ${session.user}`;
+        $('loginView').classList.add('hidden');
+        $('appView').classList.remove('hidden');
+        renderBathroomList();
+      }
+      restoreTimers();
+    }
+
+    boot();
+  </script>
 </body>
 </html>
